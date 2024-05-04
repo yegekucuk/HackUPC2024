@@ -57,7 +57,7 @@ def getDirectionChange(change : tuple, current = [0,0]):
     delta_x = change[0]
     delta_y = change[1]
     maximum = max(abs(delta_x),abs(delta_y))
-    threshold = 30
+    threshold = 15
     if abs(maximum) >= threshold:
         if maximum == abs(delta_x):
             return [1,0] if delta_x < 0 else [-1,0]
