@@ -2,8 +2,7 @@ import pygame
 from random import randrange
 import face
 import cv2
-
-# Head Controller Branch
+from const import *
 
 # start the camera
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -13,21 +12,15 @@ if not cap.isOpened():
     exit(1)
 change, location = face.getDeltaLoc()
 
-# resolution
-# res = (800,600)
-res = (1920,1080)
-res_x = res[0]
-res_y = res[1]
-
 # pygame setup
 pygame.init()
 screen = pygame.display.set_mode(res)
 clock = pygame.time.Clock()
 running = True
 start_game = False
-# text font
-font_size = 100
 my_font = pygame.font.SysFont('Comic Sans MS', font_size)
+
+# player pos and movement
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 player_movement = [0,0]
 
@@ -41,19 +34,15 @@ while True:
     if start_game:
         break
 
-    screen.fill("#000000")
-    rgb_white = (255,255,255)
+    screen.fill("black")
     text_surface = my_font.render("Click to start game", False, rgb_white)
     screen.blit(text_surface, (650,500))
     pygame.display.flip()
     clock.tick(60)
 
-obstacle_size = 30
-character_size = 40
+# random position for obstacle
 pos = pygame.Vector2(randrange(1920), randrange(1080))
 collision_rect = pygame.Rect(pos[0], pos[1], character_size*2, character_size*2)
-collision = 0
-acceleration = 10
 
 while running:
     # poll for events
@@ -63,20 +52,10 @@ while running:
             pygame.quit()
 
     # fill the screen with a color to wipe away anything from last frame
-    screen.fill("#EB89FF")
-
+    screen.fill("green")
+    # creating the character
     pygame.draw.circle(screen, "blue", player_pos, character_size)
-
-    #keys = pygame.key.get_pressed()
-    #if keys [pygame.K_w]:
-    #    player_movement = [0,-1]
-    #if keys[pygame.K_s]:
-    #    player_movement = [0,1]
-    #if keys[pygame.K_a]:
-    #    player_movement = [-1,0]
-    #if keys[pygame.K_d]:
-    #    player_movement = [1,0]
-
+    
     change, location = face.getDeltaLoc(location[0], location[1])
     player_movement = face.getDirectionChange(change, player_movement)
     print("Change: ", change, player_movement)
@@ -98,7 +77,7 @@ while running:
             player_pos[1] = 0
 
     player_rect = pygame.Rect(player_pos[0], player_pos[1], character_size*2, character_size*2)
-    pygame.draw.circle(screen, "green", pos, obstacle_size)
+    pygame.draw.circle(screen, "red", pos, obstacle_size)
     collision = collision_rect.colliderect(player_rect)
     if collision:
         pos = pygame.Vector2(randrange(1920), randrange(1080))
@@ -113,7 +92,7 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-    screen.fill("#000000")
+    screen.fill("black")
     
     text_surface = my_font.render("GAME OVER", False, rgb_white)
     screen.blit(text_surface, ((res_x//2)-font_size, (res_y//2)-font_size))
