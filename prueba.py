@@ -1,7 +1,8 @@
 import pygame
 
 # resolution
-res = (800,600)
+# res = (800,600)
+res = (1920,1080)
 res_x = res[0]
 res_y = res[1]
 
@@ -39,7 +40,7 @@ while running:
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            pygame.quit()
 
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("#EB89FF")
