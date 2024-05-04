@@ -1,13 +1,19 @@
 import pygame
-import random
+
+# resolution
+res = (800,600)
+res_x = res[0]
+res_y = res[1]
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((1920, 1080))
+screen = pygame.display.set_mode(res)
 clock = pygame.time.Clock()
 running = True
 start_game = False
-my_font = pygame.font.SysFont('Comic Sans MS', 100)
+# text font
+font_size = 100
+my_font = pygame.font.SysFont('Comic Sans MS', font_size)
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
 player_movement = [0,0]
 
@@ -22,7 +28,8 @@ while True:
         break
 
     screen.fill("#000000")
-    text_surface = my_font.render("Click to start game", False, (255, 255, 255))
+    rgb_white = (255,255,255)
+    text_surface = my_font.render("Click to start game", False, rgb_white)
     screen.blit(text_surface, (650,500))
     pygame.display.flip()
     clock.tick(60)
@@ -49,14 +56,21 @@ while running:
     if keys[pygame.K_d]:
         player_movement = [1,0]
 
-    if (player_pos[0] >= 0 and player_pos[0] <= 1920):
+    if (player_pos[0] >= 0 and player_pos[0] <= res_x):
         player_pos[0] += 10*player_movement[0]
     else:
-        break
-    if (player_pos[1] >= 0 and player_pos[1] <= 1080):
+        if player_pos[0] < 0:
+            player_pos[0] = res_x # break
+        else:
+            player_pos[0] = 0
+    
+    if (player_pos[1] >= 0 and player_pos[1] <= res_y):
         player_pos[1] += 10*player_movement[1]
     else:
-        break
+        if player_pos[1] < 0:
+            player_pos[1] = res_y # break
+        else:
+            player_pos[1] = 0
 
     # flip() the display to put your work on screen
     pygame.display.flip()
@@ -68,8 +82,8 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
     screen.fill("#000000")
-    text_surface = my_font.render("GAME OVER", False, (255, 255, 255))
-    screen.blit(text_surface, (750, 500))
+    
+    text_surface = my_font.render("GAME OVER", False, rgb_white)
+    screen.blit(text_surface, ((res_x//2)-font_size, (res_y//2)-font_size))
     pygame.display.flip()
     clock.tick(60)
-
