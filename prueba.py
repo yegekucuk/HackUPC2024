@@ -1,4 +1,5 @@
 import pygame
+import random
 
 # pygame setup
 pygame.init()
@@ -13,7 +14,7 @@ player_movement = [0,0]
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            pygame.quit()
         if event.type == pygame.MOUSEBUTTONUP:
             start_game = True
             break
@@ -50,21 +51,25 @@ while running:
 
     if (player_pos[0] >= 0 and player_pos[0] <= 1920):
         player_pos[0] += 10*player_movement[0]
-    elif (player_pos[0] <= 0 and player_movement[0] > 0):
-        player_pos[0] += 10*player_movement[0]
-    elif (player_pos[0] >= 1920 and player_movement[0] < 0):
-        player_pos[0] += 10*player_movement[0]
+    else:
+        break
     if (player_pos[1] >= 0 and player_pos[1] <= 1080):
         player_pos[1] += 10*player_movement[1]
-    elif (player_pos[1] <= 0 and player_movement[1] > 0):
-        player_pos[1] += 10*player_movement[1]
-    elif (player_pos[1] >= 1080 and player_movement[1] < 0):
-        player_pos[1] += 10*player_movement[1]
+    else:
+        break
 
     # flip() the display to put your work on screen
     pygame.display.flip()
 
     clock.tick(60)  # limits FPS to 60
 
-pygame.quit()
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+    screen.fill("#000000")
+    text_surface = my_font.render("GAME OVER", False, (255, 255, 255))
+    screen.blit(text_surface, (750, 500))
+    pygame.display.flip()
+    clock.tick(60)
 
