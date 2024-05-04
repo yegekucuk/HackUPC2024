@@ -1,4 +1,5 @@
 import pygame
+from random import randrange
 
 # resolution
 # res = (800,600)
@@ -35,6 +36,13 @@ while True:
     pygame.display.flip()
     clock.tick(60)
 
+obstacle_size = 30
+character_size = 40
+pos = pygame.Vector2(randrange(1920), randrange(1080))
+collision_rect = pygame.Rect(pos[0], pos[1], character_size*2, character_size*2)
+collision = 0
+acceleration = 10
+
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -45,7 +53,7 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("#EB89FF")
 
-    pygame.draw.circle(screen, "blue", player_pos, 40)
+    pygame.draw.circle(screen, "blue", player_pos, character_size)
 
     keys = pygame.key.get_pressed()
     if keys [pygame.K_w]:
@@ -58,7 +66,7 @@ while running:
         player_movement = [1,0]
 
     if (player_pos[0] >= 0 and player_pos[0] <= res_x):
-        player_pos[0] += 10*player_movement[0]
+        player_pos[0] += acceleration*player_movement[0]
     else:
         if player_pos[0] < 0:
             player_pos[0] = res_x # break
@@ -66,12 +74,19 @@ while running:
             player_pos[0] = 0
     
     if (player_pos[1] >= 0 and player_pos[1] <= res_y):
-        player_pos[1] += 10*player_movement[1]
+        player_pos[1] += acceleration*player_movement[1]
     else:
         if player_pos[1] < 0:
             player_pos[1] = res_y # break
         else:
             player_pos[1] = 0
+
+    player_rect = pygame.Rect(player_pos[0], player_pos[1], character_size*2, character_size*2)
+    pygame.draw.circle(screen, "green", pos, obstacle_size)
+    collision = collision_rect.colliderect(player_rect)
+    if collision:
+        pos = pygame.Vector2(randrange(1920), randrange(1080))
+        collision_rect = pygame.Rect(pos[0], pos[1], obstacle_size*2, obstacle_size*2)
 
     # flip() the display to put your work on screen
     pygame.display.flip()
