@@ -1,5 +1,16 @@
 import pygame
+import face
+import cv2
+
 # Head Controller Branch
+
+# start the camera
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+cap = cv2.VideoCapture(0)
+if not cap.isOpened():
+    print("Cannot open camera")
+    exit(1)
+change, location = face.getDeltaLoc()
 
 # resolution
 res = (800,600)
@@ -47,15 +58,19 @@ while running:
 
     pygame.draw.circle(screen, "blue", player_pos, 40)
 
-    keys = pygame.key.get_pressed()
-    if keys [pygame.K_w]:
-        player_movement = [0,-1]
-    if keys[pygame.K_s]:
-        player_movement = [0,1]
-    if keys[pygame.K_a]:
-        player_movement = [-1,0]
-    if keys[pygame.K_d]:
-        player_movement = [1,0]
+    #keys = pygame.key.get_pressed()
+    #if keys [pygame.K_w]:
+    #    player_movement = [0,-1]
+    #if keys[pygame.K_s]:
+    #    player_movement = [0,1]
+    #if keys[pygame.K_a]:
+    #    player_movement = [-1,0]
+    #if keys[pygame.K_d]:
+    #    player_movement = [1,0]
+
+    change, location = face.getDeltaLoc(location[0], location[1])
+    player_movement = face.getDirectionChange(change, player_movement)
+    print("Change: ", change, player_movement)
 
     if (player_pos[0] >= 0 and player_pos[0] <= res_x):
         player_pos[0] += 10*player_movement[0]

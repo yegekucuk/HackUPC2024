@@ -38,18 +38,21 @@ def getDeltaLoc(prev_loc_x = 0, prev_loc_y = 0):
         delta_x = center_x - prev_loc_x
         delta_y = center_y - prev_loc_y
 
-        return (delta_x, delta_y), (center_x, center_y)
+        if prev_loc_x == 0 and prev_loc_y == 0:
+            return (0,0), (center_x, center_y)
+        else:
+            return (delta_x, delta_y), (center_x, center_y)
         
     else:
         return (0,0), (0,0)
     
-def getDirectionChange(change : tuple):
+def getDirectionChange(change : tuple, current = [0,0]):
     """
-    return 0 for left
-    return 1 for up
-    return 2 for right
-    return 3 for down
-    return -1 for no change
+    return [-1,0] for left
+    return [0,-1] for up
+    return [1,0] for right
+    return [0,1] for down
+    return None for no change
     """
     delta_x = change[0]
     delta_y = change[1]
@@ -57,11 +60,11 @@ def getDirectionChange(change : tuple):
     threshold = 30
     if abs(maximum) >= threshold:
         if maximum == abs(delta_x):
-            return 2 if delta_x < 0 else 0
+            return [1,0] if delta_x < 0 else [-1,0]
         elif maximum == abs(delta_y):
-            return 1 if delta_y < 0 else 3
+            return [0,-1] if delta_y < 0 else [0,1]
     else:
-        return -1
+        return current
 
 # Testing
 if __name__ == "__main__":
@@ -71,17 +74,17 @@ if __name__ == "__main__":
         change, location = getDeltaLoc(location[0], location[1])
         print("Change: ", change)
         direction = getDirectionChange(change)
-        direction_str = ""
+        direction_str : str
         match (direction):
-            case 0:
+            case [-1,0]:
                 direction_str = "left"
-            case 1:
+            case [0,-1]:
                 direction_str = "up"
-            case 2:
+            case [1,0]:
                 direction_str = "right"
-            case 3:
+            case [0,1]:
                 direction_str = "down"
-            case -1:
+            case [0,0]:
                 direction_str = "none"
         print("Direction: ", direction_str)
         sleep(0.5)
