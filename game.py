@@ -41,8 +41,11 @@ while True:
     clock.tick(60)
 
 # random position for obstacle
-pos = pygame.Vector2(randrange(1920), randrange(1080))
-collision_rect = pygame.Rect(pos[0], pos[1], character_size*2, character_size*2)
+pos = pygame.Vector2(randrange(res_x), randrange(res_y))
+goal_rect = pygame.Rect(pos[0], pos[1], character_size*2, character_size*2)
+enemy_rects = []
+enemy_rects.append({pygame.Rect(randrange(res_x), randrange(res_y)), time.time()})
+enemy_rects.append({pygame.Rect(randrange(res_x), randrange(res_y)), time.time()})
 
 while running:
     # poll for events
@@ -77,11 +80,18 @@ while running:
             player_pos[1] = 0
 
     player_rect = pygame.Rect(player_pos[0], player_pos[1], character_size*2, character_size*2)
-    pygame.draw.circle(screen, "red", pos, obstacle_size)
-    collision = collision_rect.colliderect(player_rect)
+    pygame.draw.circle(screen, "red", pos, goal_size)
+    collision = goal_rect.colliderect(player_rect)
     if collision:
         pos = pygame.Vector2(randrange(1920), randrange(1080))
-        collision_rect = pygame.Rect(pos[0], pos[1], obstacle_size*2, obstacle_size*2)
+        goal_rect = pygame.Rect(pos[0], pos[1], goal_size*2, goal_size*2)
+    for enemy in enemy_rects:
+        if (time.time() - enemy[1] >= enemy_life):
+            enemy_rects.remove(enemy)
+            enemy_rects.append({pygame.Rect(randrange(res_x), randrange(res_y)), time.time()})
+        collision = enemy[0].colliderect(player_rect)
+        if (time.time() - enemy[1] >= activation_time and collision):
+            running = False
 
     # flip() the display to put your work on screen
     pygame.display.flip()
