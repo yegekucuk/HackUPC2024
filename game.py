@@ -88,7 +88,7 @@ while running:
         player_pos[0] += acceleration*player_movement[0]
     else:
         if player_pos[0] < 0:
-            player_pos[0] = res_x # break
+            player_pos[0] = res_x
         else:
             player_pos[0] = 0
     
@@ -96,7 +96,7 @@ while running:
         player_pos[1] += acceleration*player_movement[1]
     else:
         if player_pos[1] < 0:
-            player_pos[1] = res_y # break
+            player_pos[1] = res_y
         else:
             player_pos[1] = 0
 
@@ -129,6 +129,8 @@ while True:
     
     text_surface = my_font.render("Your score: %d" %(point), False, rgb_white)
     size_of_text = text_surface.get_size()
-    screen.blit(text_surface, ((res_x//2) - size_of_text[0]//2, (res_y//2) - size_of_text[1]//2))
+    text_loc = ((res_x//2) - size_of_text[0]//2, (res_y//2) - size_of_text[1]//2)
+    screen.blit(text_surface, (text_loc))
+
     pygame.display.flip()
     clock.tick(60)

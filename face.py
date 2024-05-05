@@ -1,4 +1,5 @@
 import cv2
+from const import fc_width as width, fc_height as height
 
 # loading the pretrained haarcascade face detect
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -37,6 +38,12 @@ def getDeltaLoc(prev_loc_x = 0, prev_loc_y = 0):
         # calculate differences
         delta_x = center_x - prev_loc_x
         delta_y = center_y - prev_loc_y
+        
+        # display face
+        frame = cv2.resize(frame, (width, height))
+        # horizontal flip
+        frame = cv2.flip(frame, 1)
+        cv2.imshow('Face Detection', frame)
 
         if prev_loc_x == 0 and prev_loc_y == 0:
             return (0,0), (center_x, center_y)
