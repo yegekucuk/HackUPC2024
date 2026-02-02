@@ -44,6 +44,7 @@ def getDeltaLoc(prev_loc_x = 0, prev_loc_y = 0):
         # horizontal flip
         frame = cv2.flip(frame, 1)
         cv2.imshow('Face Detection', frame)
+        cv2.waitKey(1)
 
         if prev_loc_x == 0 and prev_loc_y == 0:
             return (0,0), (center_x, center_y)

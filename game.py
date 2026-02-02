@@ -1,7 +1,7 @@
 import pygame
 from random import randrange
 import face
-import cv2
+
 from const import *
 import time
 
@@ -9,11 +9,6 @@ import time
 point = 0
 
 # start the camera
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-cap = cv2.VideoCapture(0)
-if not cap.isOpened():
-    print("Cannot open camera")
-    exit(1)
 change, location = face.getDeltaLoc()
 
 # pygame setup
